@@ -1631,7 +1631,7 @@ class JniUtil {
     } else if (env_rs == JNI_EDETACHED) {
       // current thread is not attached, attempt to attach
       const jint rs_attach =
-          jvm->AttachCurrentThread(reinterpret_cast<void**>(&env), NULL);
+          jvm->AttachCurrentThread(reinterpret_cast<JNIEnv**>(&env), NULL);
       if (rs_attach == JNI_OK) {
         *attached = JNI_TRUE;
         return env;
