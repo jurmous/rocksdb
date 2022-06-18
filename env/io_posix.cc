@@ -1377,8 +1377,8 @@ IOStatus PosixWritableFile::Close(const IOOptions& /*opts*/,
     // If not, we should hack it with FALLOC_FL_PUNCH_HOLE
     if (result == 0 &&
         (file_stats.st_size + file_stats.st_blksize - 1) /
-                file_stats.st_blksize !=
-            file_stats.st_blocks / (file_stats.st_blksize / 512)) {
+                (unsigned)file_stats.st_blksize !=
+            (unsigned)file_stats.st_blocks / (file_stats.st_blksize / 512)) {
       IOSTATS_TIMER_GUARD(allocate_nanos);
       if (allow_fallocate_) {
         fallocate(fd_, FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE, filesize_,
