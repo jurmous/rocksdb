@@ -755,7 +755,7 @@ Status WriteCommittedTxn::CommitWithoutPrepareInternal() {
           const Comparator* ucmp =
               WriteBatchWithIndexInternal::GetUserComparator(*wbwi, cf);
           return ucmp ? ucmp->timestamp_size()
-                      : std::numeric_limits<size_t>::max();
+                      : (size_t)std::numeric_limits<size_t>::max();
         });
     if (!s.ok()) {
       return s;
@@ -831,7 +831,7 @@ Status WriteCommittedTxn::CommitInternal() {
         const Comparator* ucmp =
             WriteBatchWithIndexInternal::GetUserComparator(*wbwi, cf);
         return ucmp ? ucmp->timestamp_size()
-                    : std::numeric_limits<size_t>::max();
+                    : (size_t)std::numeric_limits<size_t>::max();
       });
     }
   }
