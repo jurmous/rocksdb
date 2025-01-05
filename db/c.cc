@@ -1250,6 +1250,17 @@ void rocksdb_drop_column_family(rocksdb_t* db,
   SaveError(errptr, db->rep->DropColumnFamily(handle->rep));
 }
 
+void rocksdb_drop_column_families(rocksdb_t* db,
+                                rocksdb_column_family_handle_t** handles,
+                                size_t num_handles,
+                                char** errptr) {
+  std::vector<ColumnFamilyHandle*> cf_handles;
+  for (size_t i = 0; i < num_handles; i++) {
+    cf_handles.push_back(handles[i]->rep);
+  }
+  SaveError(errptr, db->rep->DropColumnFamilies(cf_handles));
+}
+
 uint32_t rocksdb_column_family_handle_get_id(
     rocksdb_column_family_handle_t* handle) {
   return handle->rep->GetID();
@@ -2057,16 +2068,32 @@ void rocksdb_verify_checksum(rocksdb_t* db, char** errptr) {
   SaveError(errptr, db->rep->VerifyChecksum());
 }
 
+void rocksdb_reset_stats(rocksdb_t* db, char** errptr) {
+  SaveError(errptr, db->rep->ResetStats());
+}
+
 int32_t rocksdb_number_levels(rocksdb_t* db) {
   return db->rep->NumberLevels();
+}
+
+int32_t rocksdb_number_levels_cf(rocksdb_t* db, rocksdb_column_family_handle_t* column_family) {
+  return db->rep->NumberLevels(column_family->rep);
 }
 
 int32_t rocksdb_max_mem_compaction_level(rocksdb_t* db) {
   return db->rep->MaxMemCompactionLevel();
 }
 
+int32_t rocksdb_max_mem_compaction_level_cf(rocksdb_t* db, rocksdb_column_family_handle_t* column_family) {
+  return db->rep->MaxMemCompactionLevel(column_family->rep);
+}
+
 int32_t rocksdb_level0_stop_write_trigger(rocksdb_t* db) {
   return db->rep->Level0StopWriteTrigger();
+}
+
+int32_t rocksdb_level0_stop_write_trigger_cf(rocksdb_t* db, rocksdb_column_family_handle_t* column_family) {
+  return db->rep->Level0StopWriteTrigger(column_family->rep);
 }
 
 void rocksdb_disable_file_deletions(rocksdb_t* db, char** errptr) {
@@ -4373,6 +4400,10 @@ void rocksdb_options_statistics_get_histogram_data(
   } else {
     *data = rocksdb_statistics_histogram_data_t{};
   }
+}
+
+void rocksdb_options_statistics_reset(rocksdb_options_t* opt, char** errptr) {
+  SaveError(errptr, opt->rep.statistics->Reset());
 }
 
 void rocksdb_options_set_ratelimiter(rocksdb_options_t* opt,
