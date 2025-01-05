@@ -1894,6 +1894,54 @@ char* rocksdb_property_value_cf(rocksdb_t* db,
   }
 }
 
+char** rocksdb_property_map_value(rocksdb_t* db, const char* propname,
+                                 size_t* num_entries, size_t** entry_sizes) {
+  std::map<std::string, std::string> props;
+  if (db->rep->GetMapProperty(Slice(propname), &props)) {
+    *num_entries = props.size();
+    *entry_sizes = static_cast<size_t*>(malloc(sizeof(size_t) * props.size() * 2));
+    char** values = static_cast<char**>(malloc(sizeof(char*) * props.size() * 2));
+    size_t i = 0;
+    for (const auto& prop : props) {
+      values[i] = strdup(prop.first.c_str());
+      (*entry_sizes)[i] = prop.first.size();
+      values[i + 1] = strdup(prop.second.c_str());
+      (*entry_sizes)[i + 1] = prop.second.size();
+      i += 2;
+    }
+    return values;
+  } else {
+    *num_entries = 0;
+    *entry_sizes = nullptr;
+    return nullptr;
+  }
+}
+
+char** rocksdb_property_map_value_cf(rocksdb_t* db,
+                                    rocksdb_column_family_handle_t* column_family,
+                                    const char* propname, size_t* num_entries,
+                                    size_t** entry_sizes) {
+  std::map<std::string, std::string> props;
+  if (db->rep->GetMapProperty(column_family->rep, Slice(propname), &props)) {
+    *num_entries = props.size();
+    *entry_sizes = static_cast<size_t*>(malloc(sizeof(size_t) * props.size() * 2));
+    char** values = static_cast<char**>(malloc(sizeof(char*) * props.size() * 2));
+    size_t i = 0;
+    for (const auto& prop : props) {
+      values[i] = strdup(prop.first.c_str());
+      (*entry_sizes)[i] = prop.first.size();
+      values[i + 1] = strdup(prop.second.c_str());
+      (*entry_sizes)[i + 1] = prop.second.size();
+      i += 2;
+    }
+    return values;
+  } else {
+    *num_entries = 0;
+    *entry_sizes = nullptr;
+    return nullptr;
+  }
+}
+  
 void rocksdb_approximate_sizes(rocksdb_t* db, int num_ranges,
                                const char* const* range_start_key,
                                const size_t* range_start_key_len,
