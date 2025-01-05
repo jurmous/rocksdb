@@ -808,81 +808,88 @@ extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_put(rocksdb_writebatch_t*,
                                                        const char* key,
                                                        size_t klen,
                                                        const char* val,
-                                                       size_t vlen);
+                                                       size_t vlen,
+                                                       char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_put_cf(
     rocksdb_writebatch_t*, rocksdb_column_family_handle_t* column_family,
-    const char* key, size_t klen, const char* val, size_t vlen);
+    const char* key, size_t klen, const char* val, size_t vlen, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_put_cf_with_ts(
     rocksdb_writebatch_t*, rocksdb_column_family_handle_t* column_family,
     const char* key, size_t klen, const char* ts, size_t tslen, const char* val,
-    size_t vlen);
+    size_t vlen, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_putv(
     rocksdb_writebatch_t* b, int num_keys, const char* const* keys_list,
     const size_t* keys_list_sizes, int num_values,
-    const char* const* values_list, const size_t* values_list_sizes);
+    const char* const* values_list, const size_t* values_list_sizes,
+    char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_putv_cf(
     rocksdb_writebatch_t* b, rocksdb_column_family_handle_t* column_family,
     int num_keys, const char* const* keys_list, const size_t* keys_list_sizes,
     int num_values, const char* const* values_list,
-    const size_t* values_list_sizes);
+    const size_t* values_list_sizes, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_merge(rocksdb_writebatch_t*,
                                                          const char* key,
                                                          size_t klen,
                                                          const char* val,
-                                                         size_t vlen);
+                                                         size_t vlen,
+                                                         char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_merge_cf(
     rocksdb_writebatch_t*, rocksdb_column_family_handle_t* column_family,
-    const char* key, size_t klen, const char* val, size_t vlen);
+    const char* key, size_t klen, const char* val, size_t vlen,
+    char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_mergev(
     rocksdb_writebatch_t* b, int num_keys, const char* const* keys_list,
     const size_t* keys_list_sizes, int num_values,
-    const char* const* values_list, const size_t* values_list_sizes);
+    const char* const* values_list, const size_t* values_list_sizes,
+    char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_mergev_cf(
     rocksdb_writebatch_t* b, rocksdb_column_family_handle_t* column_family,
     int num_keys, const char* const* keys_list, const size_t* keys_list_sizes,
     int num_values, const char* const* values_list,
-    const size_t* values_list_sizes);
+    const size_t* values_list_sizes, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_delete(rocksdb_writebatch_t*,
                                                           const char* key,
-                                                          size_t klen);
+                                                          size_t klen,
+                                                          char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_singledelete(
-    rocksdb_writebatch_t* b, const char* key, size_t klen);
+    rocksdb_writebatch_t* b, const char* key, size_t klen, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_delete_cf(
     rocksdb_writebatch_t*, rocksdb_column_family_handle_t* column_family,
-    const char* key, size_t klen);
+    const char* key, size_t klen, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_delete_cf_with_ts(
     rocksdb_writebatch_t*, rocksdb_column_family_handle_t* column_family,
-    const char* key, size_t klen, const char* ts, size_t tslen);
+    const char* key, size_t klen, const char* ts, size_t tslen, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_singledelete_cf(
     rocksdb_writebatch_t* b, rocksdb_column_family_handle_t* column_family,
-    const char* key, size_t klen);
+    const char* key, size_t klen, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_singledelete_cf_with_ts(
     rocksdb_writebatch_t* b, rocksdb_column_family_handle_t* column_family,
-    const char* key, size_t klen, const char* ts, size_t tslen);
+    const char* key, size_t klen, const char* ts, size_t tslen, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_deletev(
     rocksdb_writebatch_t* b, int num_keys, const char* const* keys_list,
-    const size_t* keys_list_sizes);
+    const size_t* keys_list_sizes, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_deletev_cf(
     rocksdb_writebatch_t* b, rocksdb_column_family_handle_t* column_family,
-    int num_keys, const char* const* keys_list, const size_t* keys_list_sizes);
+    int num_keys, const char* const* keys_list, const size_t* keys_list_sizes,
+    char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_delete_range(
     rocksdb_writebatch_t* b, const char* start_key, size_t start_key_len,
-    const char* end_key, size_t end_key_len);
+    const char* end_key, size_t end_key_len, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_delete_range_cf(
     rocksdb_writebatch_t* b, rocksdb_column_family_handle_t* column_family,
     const char* start_key, size_t start_key_len, const char* end_key,
-    size_t end_key_len);
+    size_t end_key_len, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_delete_rangev(
     rocksdb_writebatch_t* b, int num_keys, const char* const* start_keys_list,
     const size_t* start_keys_list_sizes, const char* const* end_keys_list,
-    const size_t* end_keys_list_sizes);
+    const size_t* end_keys_list_sizes, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_delete_rangev_cf(
     rocksdb_writebatch_t* b, rocksdb_column_family_handle_t* column_family,
     int num_keys, const char* const* start_keys_list,
     const size_t* start_keys_list_sizes, const char* const* end_keys_list,
-    const size_t* end_keys_list_sizes);
+    const size_t* end_keys_list_sizes, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_put_log_data(
-    rocksdb_writebatch_t*, const char* blob, size_t len);
+    rocksdb_writebatch_t*, const char* blob, size_t len, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_iterate(
     rocksdb_writebatch_t*, void* state,
     void (*put)(void*, const char* k, size_t klen, const char* v, size_t vlen),
@@ -952,72 +959,77 @@ extern ROCKSDB_LIBRARY_API int rocksdb_writebatch_wi_count(
     rocksdb_writebatch_wi_t* b);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_wi_put(
     rocksdb_writebatch_wi_t*, const char* key, size_t klen, const char* val,
-    size_t vlen);
+    size_t vlen, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_wi_put_cf(
     rocksdb_writebatch_wi_t*, rocksdb_column_family_handle_t* column_family,
-    const char* key, size_t klen, const char* val, size_t vlen);
+    const char* key, size_t klen, const char* val, size_t vlen, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_wi_putv(
     rocksdb_writebatch_wi_t* b, int num_keys, const char* const* keys_list,
     const size_t* keys_list_sizes, int num_values,
-    const char* const* values_list, const size_t* values_list_sizes);
+    const char* const* values_list, const size_t* values_list_sizes,
+    char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_wi_putv_cf(
     rocksdb_writebatch_wi_t* b, rocksdb_column_family_handle_t* column_family,
     int num_keys, const char* const* keys_list, const size_t* keys_list_sizes,
     int num_values, const char* const* values_list,
-    const size_t* values_list_sizes);
+    const size_t* values_list_sizes, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_wi_merge(
     rocksdb_writebatch_wi_t*, const char* key, size_t klen, const char* val,
-    size_t vlen);
+    size_t vlen, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_wi_merge_cf(
     rocksdb_writebatch_wi_t*, rocksdb_column_family_handle_t* column_family,
-    const char* key, size_t klen, const char* val, size_t vlen);
+    const char* key, size_t klen, const char* val, size_t vlen,
+    char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_wi_mergev(
     rocksdb_writebatch_wi_t* b, int num_keys, const char* const* keys_list,
     const size_t* keys_list_sizes, int num_values,
-    const char* const* values_list, const size_t* values_list_sizes);
+    const char* const* values_list, const size_t* values_list_sizes,
+    char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_wi_mergev_cf(
     rocksdb_writebatch_wi_t* b, rocksdb_column_family_handle_t* column_family,
     int num_keys, const char* const* keys_list, const size_t* keys_list_sizes,
     int num_values, const char* const* values_list,
-    const size_t* values_list_sizes);
+    const size_t* values_list_sizes, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_wi_delete(
-    rocksdb_writebatch_wi_t*, const char* key, size_t klen);
+    rocksdb_writebatch_wi_t*, const char* key, size_t klen, char** errptr   );
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_wi_singledelete(
-    rocksdb_writebatch_wi_t*, const char* key, size_t klen);
+    rocksdb_writebatch_wi_t*, const char* key, size_t klen, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_wi_delete_cf(
     rocksdb_writebatch_wi_t*, rocksdb_column_family_handle_t* column_family,
-    const char* key, size_t klen);
+    const char* key, size_t klen, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_wi_singledelete_cf(
     rocksdb_writebatch_wi_t*, rocksdb_column_family_handle_t* column_family,
-    const char* key, size_t klen);
+    const char* key, size_t klen, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_wi_deletev(
     rocksdb_writebatch_wi_t* b, int num_keys, const char* const* keys_list,
-    const size_t* keys_list_sizes);
+    const size_t* keys_list_sizes, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_wi_deletev_cf(
     rocksdb_writebatch_wi_t* b, rocksdb_column_family_handle_t* column_family,
-    int num_keys, const char* const* keys_list, const size_t* keys_list_sizes);
+    int num_keys, const char* const* keys_list, const size_t* keys_list_sizes,
+    char** errptr);
 // DO NOT USE - rocksdb_writebatch_wi_delete_range is not yet supported
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_wi_delete_range(
     rocksdb_writebatch_wi_t* b, const char* start_key, size_t start_key_len,
-    const char* end_key, size_t end_key_len);
+    const char* end_key, size_t end_key_len, char** errptr);
 // DO NOT USE - rocksdb_writebatch_wi_delete_range_cf is not yet supported
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_wi_delete_range_cf(
     rocksdb_writebatch_wi_t* b, rocksdb_column_family_handle_t* column_family,
     const char* start_key, size_t start_key_len, const char* end_key,
-    size_t end_key_len);
+    size_t end_key_len, char** errptr);
 // DO NOT USE - rocksdb_writebatch_wi_delete_rangev is not yet supported
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_wi_delete_rangev(
     rocksdb_writebatch_wi_t* b, int num_keys,
     const char* const* start_keys_list, const size_t* start_keys_list_sizes,
-    const char* const* end_keys_list, const size_t* end_keys_list_sizes);
+    const char* const* end_keys_list, const size_t* end_keys_list_sizes,
+    char** errptr);
 // DO NOT USE - rocksdb_writebatch_wi_delete_rangev_cf is not yet supported
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_wi_delete_rangev_cf(
     rocksdb_writebatch_wi_t* b, rocksdb_column_family_handle_t* column_family,
     int num_keys, const char* const* start_keys_list,
     const size_t* start_keys_list_sizes, const char* const* end_keys_list,
-    const size_t* end_keys_list_sizes);
+    const size_t* end_keys_list_sizes, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_wi_put_log_data(
-    rocksdb_writebatch_wi_t*, const char* blob, size_t len);
+    rocksdb_writebatch_wi_t*, const char* blob, size_t len, char** errptr);
 extern ROCKSDB_LIBRARY_API void rocksdb_writebatch_wi_iterate(
     rocksdb_writebatch_wi_t* b, void* state,
     void (*put)(void*, const char* k, size_t klen, const char* v, size_t vlen),
