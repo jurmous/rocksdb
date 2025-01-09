@@ -466,6 +466,10 @@ rocksdb_create_column_family_with_ttl(
 extern ROCKSDB_LIBRARY_API void rocksdb_drop_column_family(
     rocksdb_t* db, rocksdb_column_family_handle_t* handle, char** errptr);
 
+extern ROCKSDB_LIBRARY_API void rocksdb_drop_column_families(
+    rocksdb_t* db, rocksdb_column_family_handle_t** handles, size_t num_handles,
+    char** errptr);
+
 extern ROCKSDB_LIBRARY_API rocksdb_column_family_handle_t*
     rocksdb_get_default_column_family_handle(rocksdb_t* db);
 
@@ -755,13 +759,28 @@ extern ROCKSDB_LIBRARY_API void rocksdb_promote_l0(
 extern ROCKSDB_LIBRARY_API void rocksdb_verify_checksum(rocksdb_t* db,
                                                         char** errptr);
 
+extern ROCKSDB_LIBRARY_API void rocksdb_reset_stats(rocksdb_t* db,
+                                                    char** errptr);
+
 extern ROCKSDB_LIBRARY_API int32_t rocksdb_number_levels(rocksdb_t* db);
+
+extern ROCKSDB_LIBRARY_API int32_t rocksdb_number_levels_cf(
+    rocksdb_t* db, rocksdb_column_family_handle_t* column_family);
 
 extern ROCKSDB_LIBRARY_API int32_t
 rocksdb_max_mem_compaction_level(rocksdb_t* db);
 
+extern ROCKSDB_LIBRARY_API int32_t rocksdb_max_mem_compaction_level_cf(
+    rocksdb_t* db, rocksdb_column_family_handle_t* column_family);
+
+extern ROCKSDB_LIBRARY_API int32_t rocksdb_number_levels_cf(
+    rocksdb_t* db, rocksdb_column_family_handle_t* column_family);
+
 extern ROCKSDB_LIBRARY_API int32_t
 rocksdb_level0_stop_write_trigger(rocksdb_t* db);
+
+extern ROCKSDB_LIBRARY_API int32_t rocksdb_level0_stop_write_trigger_cf(
+    rocksdb_t* db, rocksdb_column_family_handle_t* column_family);
 
 extern ROCKSDB_LIBRARY_API void rocksdb_disable_file_deletions(rocksdb_t* db,
                                                                char** errptr);
@@ -1540,6 +1559,9 @@ extern ROCKSDB_LIBRARY_API uint64_t rocksdb_options_statistics_get_ticker_count(
 extern ROCKSDB_LIBRARY_API void rocksdb_options_statistics_get_histogram_data(
     rocksdb_options_t* opt, uint32_t histogram_type,
     rocksdb_statistics_histogram_data_t* const data);
+
+extern ROCKSDB_LIBRARY_API void rocksdb_options_statistics_reset(
+    rocksdb_options_t* opt, char** errptr);
 
 extern ROCKSDB_LIBRARY_API void rocksdb_options_set_max_write_buffer_number(
     rocksdb_options_t*, int);
