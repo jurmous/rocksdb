@@ -1165,11 +1165,15 @@ int main(int argc, char** argv) {
   StartPhase("writebatch");
   {
     rocksdb_writebatch_t* wb = rocksdb_writebatch_create();
-    rocksdb_writebatch_put(wb, "foo", 3, "a", 1);
+    rocksdb_writebatch_put(wb, "foo", 3, "a", 1, &err);
+    CheckNoError(err);
     rocksdb_writebatch_clear(wb);
-    rocksdb_writebatch_put(wb, "bar", 3, "b", 1);
-    rocksdb_writebatch_put(wb, "box", 3, "c", 1);
-    rocksdb_writebatch_delete(wb, "bar", 3);
+    rocksdb_writebatch_put(wb, "bar", 3, "b", 1, &err);
+    CheckNoError(err);
+    rocksdb_writebatch_put(wb, "box", 3, "c", 1, &err);
+    CheckNoError(err);
+    rocksdb_writebatch_delete(wb, "bar", 3, &err);
+    CheckNoError(err);
     rocksdb_write(db, woptions, wb, &err);
     CheckNoError(err);
     CheckGet(db, roptions, "foo", "hello");
@@ -1179,9 +1183,12 @@ int main(int argc, char** argv) {
     rocksdb_writebatch_iterate(wb, &pos, CheckPut, CheckDel);
     CheckCondition(pos == 3);
     rocksdb_writebatch_clear(wb);
-    rocksdb_writebatch_put(wb, "bar", 3, "b", 1);
-    rocksdb_writebatch_put(wb, "bay", 3, "d", 1);
-    rocksdb_writebatch_delete_range(wb, "bar", 3, "bay", 3);
+    rocksdb_writebatch_put(wb, "bar", 3, "b", 1, &err);
+    CheckNoError(err);
+    rocksdb_writebatch_put(wb, "bay", 3, "d", 1, &err);
+    CheckNoError(err);
+    rocksdb_writebatch_delete_range(wb, "bar", 3, "bay", 3, &err);
+    CheckNoError(err);
     rocksdb_write(db, woptions, wb, &err);
     CheckNoError(err);
     CheckGet(db, roptions, "bar", NULL);
@@ -1192,7 +1199,8 @@ int main(int argc, char** argv) {
     const char* end_list[1] = {"baz"};
     const size_t end_sizes[1] = {3};
     rocksdb_writebatch_delete_rangev(wb, 1, start_list, start_sizes, end_list,
-                                     end_sizes);
+                                     end_sizes, &err);
+    CheckNoError(err);
     rocksdb_write(db, woptions, wb, &err);
     CheckNoError(err);
     CheckGet(db, roptions, "bay", NULL);
@@ -1206,11 +1214,13 @@ int main(int argc, char** argv) {
     const size_t k_sizes[2] = {1, 2};
     const char* v_list[3] = {"x", "y", "z"};
     const size_t v_sizes[3] = {1, 1, 1};
-    rocksdb_writebatch_putv(wb, 2, k_list, k_sizes, 3, v_list, v_sizes);
+    rocksdb_writebatch_putv(wb, 2, k_list, k_sizes, 3, v_list, v_sizes, &err);
+    CheckNoError(err);
     rocksdb_write(db, woptions, wb, &err);
     CheckNoError(err);
     CheckGet(db, roptions, "zap", "xyz");
-    rocksdb_writebatch_delete(wb, "zap", 3);
+    rocksdb_writebatch_delete(wb, "zap", 3, &err);
+    CheckNoError(err);
     rocksdb_write(db, woptions, wb, &err);
     CheckNoError(err);
     CheckGet(db, roptions, "zap", NULL);
@@ -1228,7 +1238,8 @@ int main(int argc, char** argv) {
     const size_t v_sizes[3] = {1, 1, 1};
     rocksdb_writebatch_pop_save_point(wb, &err);
     CheckNoError(err);
-    rocksdb_writebatch_putv(wb, 2, k_list, k_sizes, 3, v_list, v_sizes);
+    rocksdb_writebatch_putv(wb, 2, k_list, k_sizes, 3, v_list, v_sizes, &err);
+    CheckNoError(err);
     rocksdb_writebatch_rollback_to_save_point(wb, &err);
     CheckNoError(err);
     rocksdb_write(db, woptions, wb, &err);
@@ -1240,9 +1251,12 @@ int main(int argc, char** argv) {
   StartPhase("writebatch_rep");
   {
     rocksdb_writebatch_t* wb1 = rocksdb_writebatch_create();
-    rocksdb_writebatch_put(wb1, "baz", 3, "d", 1);
-    rocksdb_writebatch_put(wb1, "quux", 4, "e", 1);
-    rocksdb_writebatch_delete(wb1, "quux", 4);
+    rocksdb_writebatch_put(wb1, "baz", 3, "d", 1, &err);
+    CheckNoError(err);
+    rocksdb_writebatch_put(wb1, "quux", 4, "e", 1, &err);
+    CheckNoError(err);
+    rocksdb_writebatch_delete(wb1, "quux", 4, &err);
+    CheckNoError(err);
     size_t repsize1 = 0;
     const char* rep = rocksdb_writebatch_data(wb1, &repsize1);
     rocksdb_writebatch_t* wb2 = rocksdb_writebatch_create_from(rep, repsize1);
@@ -1258,11 +1272,15 @@ int main(int argc, char** argv) {
   StartPhase("writebatch_wi");
   {
     rocksdb_writebatch_wi_t* wbi = rocksdb_writebatch_wi_create(0, 1);
-    rocksdb_writebatch_wi_put(wbi, "foo", 3, "a", 1);
+    rocksdb_writebatch_wi_put(wbi, "foo", 3, "a", 1, &err);
+    CheckNoError(err);
     rocksdb_writebatch_wi_clear(wbi);
-    rocksdb_writebatch_wi_put(wbi, "bar", 3, "b", 1);
-    rocksdb_writebatch_wi_put(wbi, "box", 3, "c", 1);
-    rocksdb_writebatch_wi_delete(wbi, "bar", 3);
+    rocksdb_writebatch_wi_put(wbi, "bar", 3, "b", 1, &err);
+    CheckNoError(err);
+    rocksdb_writebatch_wi_put(wbi, "box", 3, "c", 1, &err);
+    CheckNoError(err);
+    rocksdb_writebatch_wi_delete(wbi, "bar", 3, &err);
+    CheckNoError(err);
     int count = rocksdb_writebatch_wi_count(wbi);
     CheckCondition(count == 3);
 
@@ -1302,11 +1320,14 @@ int main(int argc, char** argv) {
     const size_t k_sizes[2] = {1, 2};
     const char* v_list[3] = {"x", "y", "z"};
     const size_t v_sizes[3] = {1, 1, 1};
-    rocksdb_writebatch_wi_putv(wb, 2, k_list, k_sizes, 3, v_list, v_sizes);
+    rocksdb_writebatch_wi_putv(wb, 2, k_list, k_sizes, 3, v_list, v_sizes,
+                               &err);
+    CheckNoError(err);
     rocksdb_write_writebatch_wi(db, woptions, wb, &err);
     CheckNoError(err);
     CheckGet(db, roptions, "zap", "xyz");
-    rocksdb_writebatch_wi_delete(wb, "zap", 3);
+    rocksdb_writebatch_wi_delete(wb, "zap", 3, &err);
+    CheckNoError(err);
     rocksdb_write_writebatch_wi(db, woptions, wb, &err);
     CheckNoError(err);
     CheckGet(db, roptions, "zap", NULL);
@@ -1321,7 +1342,9 @@ int main(int argc, char** argv) {
     const size_t k_sizes[2] = {1, 2};
     const char* v_list[3] = {"x", "y", "z"};
     const size_t v_sizes[3] = {1, 1, 1};
-    rocksdb_writebatch_wi_putv(wb, 2, k_list, k_sizes, 3, v_list, v_sizes);
+    rocksdb_writebatch_wi_putv(wb, 2, k_list, k_sizes, 3, v_list, v_sizes,
+                               &err);
+    CheckNoError(err);
     rocksdb_writebatch_wi_rollback_to_save_point(wb, &err);
     CheckNoError(err);
     rocksdb_write_writebatch_wi(db, woptions, wb, &err);
@@ -1360,8 +1383,10 @@ int main(int argc, char** argv) {
   {
     rocksdb_iterator_t* base_iter = rocksdb_create_iterator(db, roptions);
     rocksdb_writebatch_wi_t* wbi = rocksdb_writebatch_wi_create(0, 1);
-    rocksdb_writebatch_wi_put(wbi, "bar", 3, "b", 1);
-    rocksdb_writebatch_wi_delete(wbi, "foo", 3);
+    rocksdb_writebatch_wi_put(wbi, "bar", 3, "b", 1, &err);
+    CheckNoError(err);
+    rocksdb_writebatch_wi_delete(wbi, "foo", 3, &err);
+    CheckNoError(err);
     rocksdb_iterator_t* iter =
         rocksdb_writebatch_wi_create_iterator_with_base(wbi, base_iter);
     CheckCondition(!rocksdb_iter_valid(iter));
@@ -1782,12 +1807,16 @@ int main(int argc, char** argv) {
     CheckPinGetCF(db, roptions, handles[1], "foo", NULL);
 
     rocksdb_writebatch_t* wb = rocksdb_writebatch_create();
-    rocksdb_writebatch_put_cf(wb, handles[1], "baz", 3, "a", 1);
+    rocksdb_writebatch_put_cf(wb, handles[1], "baz", 3, "a", 1, &err);
+    CheckNoError(err);
     rocksdb_writebatch_clear(wb);
-    rocksdb_writebatch_put_cf(wb, handles[1], "bar", 3, "b", 1);
-    rocksdb_writebatch_put_cf(wb, handles[1], "box", 3, "c", 1);
-    rocksdb_writebatch_put_cf(wb, handles[1], "buff", 4, "rocksdb", 7);
-    rocksdb_writebatch_delete_cf(wb, handles[1], "bar", 3);
+    rocksdb_writebatch_put_cf(wb, handles[1], "bar", 3, "b", 1, &err);
+    CheckNoError(err);
+    rocksdb_writebatch_put_cf(wb, handles[1], "box", 3, "c", 1, &err);
+    rocksdb_writebatch_put_cf(wb, handles[1], "buff", 4, "rocksdb", 7, &err);
+    CheckNoError(err);
+    rocksdb_writebatch_delete_cf(wb, handles[1], "bar", 3, &err);
+    CheckNoError(err);
     rocksdb_write(db, woptions, wb, &err);
     CheckNoError(err);
     CheckGetCF(db, roptions, handles[1], "baz", NULL);
@@ -1801,14 +1830,22 @@ int main(int argc, char** argv) {
     rocksdb_writebatch_clear(wb);
     // Test WriteBatch iteration with Column Family
     int pos = 0;
-    rocksdb_writebatch_put_cf(wb, handles[1], "bar", 3, "b", 1);
-    rocksdb_writebatch_put_cf(wb, handles[1], "box", 3, "c", 1);
-    rocksdb_writebatch_delete_cf(wb, handles[1], "bar", 3);
-    rocksdb_writebatch_merge_cf(wb, handles[1], "box", 3, "cc", 2);
-    rocksdb_writebatch_put(wb, "foo", 3, "f", 1);
-    rocksdb_writebatch_delete(wb, "foo", 3);
-    rocksdb_writebatch_put(wb, "baz", 3, "a", 1);
-    rocksdb_writebatch_merge(wb, "baz", 3, "aa", 2);
+    rocksdb_writebatch_put_cf(wb, handles[1], "bar", 3, "b", 1, &err);
+    CheckNoError(err);
+    rocksdb_writebatch_put_cf(wb, handles[1], "box", 3, "c", 1, &err);
+    CheckNoError(err);
+    rocksdb_writebatch_delete_cf(wb, handles[1], "bar", 3, &err);
+    CheckNoError(err);
+    rocksdb_writebatch_merge_cf(wb, handles[1], "box", 3, "cc", 2, &err);
+    CheckNoError(err);
+    rocksdb_writebatch_put(wb, "foo", 3, "f", 1, &err);
+    CheckNoError(err);
+    rocksdb_writebatch_delete(wb, "foo", 3, &err);
+    CheckNoError(err);
+    rocksdb_writebatch_put(wb, "baz", 3, "a", 1, &err);
+    CheckNoError(err);
+    rocksdb_writebatch_merge(wb, "baz", 3, "aa", 2, &err);
+    CheckNoError(err);
     rocksdb_writebatch_iterate_cf(wb, &pos, CheckPutCF, CheckDelCF,
                                   CheckMergeCF);
     CheckCondition(pos == 8);
@@ -3289,11 +3326,15 @@ int main(int argc, char** argv) {
 
     // write batch into TransactionDB
     rocksdb_writebatch_t* wb = rocksdb_writebatch_create();
-    rocksdb_writebatch_put(wb, "foo", 3, "a", 1);
+    rocksdb_writebatch_put(wb, "foo", 3, "a", 1, &err);
+    CheckNoError(err);
     rocksdb_writebatch_clear(wb);
-    rocksdb_writebatch_put(wb, "bar", 3, "b", 1);
-    rocksdb_writebatch_put(wb, "box", 3, "c", 1);
-    rocksdb_writebatch_delete(wb, "bar", 3);
+    rocksdb_writebatch_put(wb, "bar", 3, "b", 1, &err);
+    CheckNoError(err);
+    rocksdb_writebatch_put(wb, "box", 3, "c", 1, &err);
+    CheckNoError(err);
+    rocksdb_writebatch_delete(wb, "bar", 3, &err);
+    CheckNoError(err);
 
     CheckCondition(rocksdb_writebatch_has_put(wb));
     CheckCondition(rocksdb_writebatch_has_delete(wb));
