@@ -572,14 +572,20 @@ static bool SaveError(char** errptr, const Status& s) {
   assert(errptr != nullptr);
   if (s.ok()) {
     return false;
-  } else if (*errptr == nullptr) {
-    *errptr = strdup(s.ToString().c_str());
-  } else {
+  }
+
+  if (*errptr != nullptr) {
     // TODO(sanjay): Merge with existing error?
     // This is a bug if *errptr is not created by malloc()
     free(*errptr);
-    *errptr = strdup(s.ToString().c_str());
   }
+
+  std::string combined_error =
+      "[" + std::to_string(static_cast<unsigned int>(s.code())) + "|" +
+      std::to_string(static_cast<unsigned int>(s.subcode())) + "] " +
+      s.ToString();
+
+  *errptr = strdup(combined_error.c_str());
   return true;
 }
 

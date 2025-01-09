@@ -1984,10 +1984,10 @@ int main(int argc, char** argv) {
 
     {
       const char* expected_cf_names[1] = {"default"};
-      LoadAndCheckLatestOptions(dbname, env, false, cache, NULL, 1,
-                                expected_cf_names,
-                                "Invalid argument: leveldb.BytewiseComparator: "
-                                "does not match existing comparator foo");
+      LoadAndCheckLatestOptions(
+          dbname, env, false, cache, NULL, 1, expected_cf_names,
+          "[4|0] Invalid argument: leveldb.BytewiseComparator: "
+          "does not match existing comparator foo");
       LoadAndCheckLatestOptions(dbname, env, false, cache, cmp, 1,
                                 expected_cf_names, NULL);
     }
@@ -2970,7 +2970,7 @@ int main(int argc, char** argv) {
     allocator = rocksdb_jemalloc_nodump_allocator_create(&err);
     if (err != NULL) {
       // not supported on all platforms, allow unsupported error
-      const char* ni = "Not implemented: ";
+      const char* ni = "[3|0] Not implemented: ";
       size_t ni_len = strlen(ni);
       size_t err_len = strlen(err);
 
