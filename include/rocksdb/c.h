@@ -675,6 +675,14 @@ extern ROCKSDB_LIBRARY_API char* rocksdb_property_value_cf(
     rocksdb_t* db, rocksdb_column_family_handle_t* column_family,
     const char* propname);
 
+extern ROCKSDB_LIBRARY_API char** rocksdb_property_map_value(
+    rocksdb_t* db, const char* propname, size_t* num_entries,
+    size_t** entry_sizes);
+
+extern ROCKSDB_LIBRARY_API char** rocksdb_property_map_value_cf(
+    rocksdb_t* db, rocksdb_column_family_handle_t* column_family,
+    const char* propname, size_t* num_entries, size_t** entry_sizes);
+
 extern ROCKSDB_LIBRARY_API void rocksdb_approximate_sizes(
     rocksdb_t* db, int num_ranges, const char* const* range_start_key,
     const size_t* range_start_key_len, const char* const* range_limit_key,
