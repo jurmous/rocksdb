@@ -3108,6 +3108,10 @@ int main(int argc, char** argv) {
     rocksdb_env_set_background_threads(e, 10);
     CheckCondition(10 == rocksdb_env_get_background_threads(e));
 
+    rocksdb_env_set_background_threads_with_priority(e, 15, 1);
+    CheckCondition(15 ==
+                   rocksdb_env_get_background_threads_with_priority(e, 1));
+
     rocksdb_env_set_high_priority_background_threads(e, 20);
     CheckCondition(20 == rocksdb_env_get_high_priority_background_threads(e));
 

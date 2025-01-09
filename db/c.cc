@@ -5495,6 +5495,16 @@ int rocksdb_env_get_background_threads(rocksdb_env_t* env) {
   return env->rep->GetBackgroundThreads();
 }
 
+void rocksdb_env_set_background_threads_with_priority(rocksdb_env_t* env, int n,
+                                                      int priority) {
+  env->rep->SetBackgroundThreads(n, static_cast<Env::Priority>(priority));
+}
+
+int rocksdb_env_get_background_threads_with_priority(rocksdb_env_t* env,
+                                                     int priority) {
+  return env->rep->GetBackgroundThreads(static_cast<Env::Priority>(priority));
+}
+
 void rocksdb_env_set_bottom_priority_background_threads(rocksdb_env_t* env,
                                                         int n) {
   env->rep->SetBackgroundThreads(n, Env::BOTTOM);
@@ -5535,6 +5545,11 @@ void rocksdb_env_lower_high_priority_thread_pool_io_priority(
   env->rep->LowerThreadPoolIOPriority(Env::HIGH);
 }
 
+void rocksdb_env_lower_with_priority_thread_pool_io_priority(rocksdb_env_t* env,
+                                                             int priority) {
+  env->rep->LowerThreadPoolIOPriority(static_cast<Env::Priority>(priority));
+}
+
 void rocksdb_env_lower_thread_pool_cpu_priority(rocksdb_env_t* env) {
   env->rep->LowerThreadPoolCPUPriority();
 }
@@ -5542,6 +5557,21 @@ void rocksdb_env_lower_thread_pool_cpu_priority(rocksdb_env_t* env) {
 void rocksdb_env_lower_high_priority_thread_pool_cpu_priority(
     rocksdb_env_t* env) {
   env->rep->LowerThreadPoolCPUPriority(Env::HIGH);
+}
+
+void rocksdb_env_lower_with_priority_thread_pool_cpu_priority(
+    rocksdb_env_t* env, int priority) {
+  env->rep->LowerThreadPoolCPUPriority(static_cast<Env::Priority>(priority));
+}
+
+int32_t rocksdb_env_get_thread_pool_queue_length(rocksdb_env_t* env) {
+  return env->rep->GetThreadPoolQueueLen();
+}
+
+void rocksdb_env_inc_background_threads_if_needed(rocksdb_env_t* env, int num,
+                                                  int priority) {
+  env->rep->IncBackgroundThreadsIfNeeded(num,
+                                         static_cast<Env::Priority>(priority));
 }
 
 void rocksdb_env_destroy(rocksdb_env_t* env) {
