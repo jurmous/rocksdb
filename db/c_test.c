@@ -3569,6 +3569,9 @@ int main(int argc, char** argv) {
     CheckNoError(err);
 
     rocksdb_transaction_options_set_skip_prepare(txn_options, 0);
+    CheckCondition(rocksdb_transaction_options_get_skip_prepare(txn_options) ==
+                   0);
+
     txn = rocksdb_transaction_begin(txn_db, woptions, txn_options, NULL);
     rocksdb_transaction_commit(txn, &err);
     CheckCondition(err != NULL);
@@ -3656,6 +3659,12 @@ int main(int argc, char** argv) {
     txn_db_options = rocksdb_transactiondb_options_create();
     rocksdb_transactiondb_options_set_transaction_lock_timeout(txn_db_options,
                                                                0);
+
+    int64_t lock_timeout =
+        rocksdb_transactiondb_options_get_transaction_lock_timeout(
+            txn_db_options);
+    CheckCondition(lock_timeout == 0);
+
     txn_options = rocksdb_transaction_options_create();
     rocksdb_options_set_create_if_missing(options, 1);
     txn_db = rocksdb_transactiondb_open(options, txn_db_options, dbname, &err);
